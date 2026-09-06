@@ -160,6 +160,18 @@ export function parseConstitution(filePath: string): Constitution {
   return result.data;
 }
 
+/**
+ * Returns the free-form Markdown body of a constitution file — everything
+ * after the frontmatter block (or the whole file, trimmed, if there's no
+ * frontmatter). Used by `guardrail sync` to carry human-written
+ * architecture notes into the generated agent instruction files verbatim.
+ */
+export function extractProse(filePath: string): string {
+  const raw = readFileSync(filePath, "utf-8");
+  const match = raw.match(FRONTMATTER_RE);
+  return match ? raw.slice(match[0].length).trim() : raw.trim();
+}
+
 export { ConstitutionSchema } from "@guardrail/core";
 export type { Constitution, Rule, Enforcement, Severity } from "@guardrail/core";
 export { renderConstitution } from "./render.js";

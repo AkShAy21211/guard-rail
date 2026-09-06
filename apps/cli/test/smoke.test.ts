@@ -19,11 +19,6 @@ describe("guardrail CLI smoke test", () => {
     expect(output).toContain("scan");
   });
 
-  it("sync (still a Phase 5 stub) prints its placeholder and exits 0", () => {
-    const output = execFileSync("node", [CLI_BIN, "sync"], { encoding: "utf-8" });
-    expect(output).toContain("sync not yet implemented");
-  });
-
   it("check exits 0 on a clean repo and non-zero when violations exist", () => {
     const nextjsFixture = resolve(__dirname, "../../../examples/nextjs");
     expect(() =>
@@ -64,6 +59,15 @@ describe("guardrail CLI smoke test", () => {
       expect(() =>
         execFileSync("node", [CLI_BIN, "init", "--path", tmpDir], { encoding: "utf-8" })
       ).toThrow();
+    });
+
+    it("sync generates CLAUDE.md/AGENTS.md/copilot-instructions/cursor rules from the constitution just written", () => {
+      const output = execFileSync("node", [CLI_BIN, "sync", "--path", tmpDir], {
+        encoding: "utf-8",
+      });
+      expect(output).toContain("CLAUDE.md");
+      expect(output).toContain("AGENTS.md");
+      expect(output).toContain(".github/copilot-instructions.md");
     });
   });
 });

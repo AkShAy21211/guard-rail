@@ -29,3 +29,20 @@ export async function getChangedFiles(repoPath: string, baseBranch: string): Pro
 
   return files;
 }
+
+/**
+ * Returns the full unified diff text vs. `baseBranch` (committed + working
+ * tree + staged), for `guardrail check --semantic` to hand to the LLM.
+ */
+export async function getDiffText(repoPath: string, baseBranch: string): Promise<string> {
+  const git = simpleGit(repoPath);
+  let committed = "";
+  try {
+    committed = await git.diff([`${baseBranch}...HEAD`]);
+  } catch {
+    committed = "";
+  }
+  const workingTree = await git.diff([]);
+  const staged = await git.diff(["--cached"]);
+  return [committed, workingTree, staged].filter((s) => s.trim().length > 0).join("\n");
+}

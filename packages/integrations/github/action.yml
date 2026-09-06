@@ -1,0 +1,50 @@
+name: "Guardrail Check"
+description: >-
+  Deterministically enforce your project's constitution in CI — zero API
+  keys, zero network calls (unless you opt into --semantic yourself).
+author: "Guardrail"
+branding:
+  icon: "shield"
+  color: "green"
+
+inputs:
+  path:
+    description: "Path to the repo to check, relative to the workflow's working directory."
+    required: false
+    default: "."
+  constitution:
+    description: "Path to the constitution file, relative to `path`."
+    required: false
+    default: ".guardrail/constitution.md"
+  diff-base:
+    description: "If set, only check files changed vs. this base ref (e.g. `origin/main`)."
+    required: false
+    default: ""
+  guardrail-version:
+    description: >-
+      npm version/tag of `guardrail` to install if it isn't already on PATH
+      (e.g. if you didn't add it as a devDependency yourself).
+    required: false
+    default: "latest"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Ensure guardrail is on PATH
+      shell: bash
+      run: |
+        if command -v guardrail >/dev/null 2>&1; then
+          echo "guardrail already on PATH: $(command -v guardrail)"
+        else
+          echo "Installing guardrail@${{ inputs.guardrail-version }}..."
+          npm install -g "guardrail@${{ inputs.guardrail-version }}"
+        fi
+
+    - name: Run guardrail check
+      shell: bash
+      run: |
+        set -- check --ci --path "${{ inputs.path }}" --constitution "${{ inputs.constitution }}"
+        if [ -n "${{ inputs.diff-base }}" ]; then
+          set -- "$@" --diff "${{ inputs.diff-base }}"
+        fi
+        guardrail "$@"

@@ -1,0 +1,48 @@
+name: Test Guardrail GitHub Action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Put guardrail on PATH (so the action skips its own install step)
+        run: pnpm --filter guardrail exec npm link
+
+      - name: Run action against a fixture with a planted violation (expect failure)
+        id: violation
+        uses: ./packages/integrations/github
+        continue-on-error: true
+        with:
+          path: examples/nextjs
+
+      - name: Assert the action failed on the planted violation
+        if: steps.violation.outcome != 'failure'
+        run: |
+          echo "expected the action to fail on examples/nextjs's planted violation, but it reported: ${{ steps.violation.outcome }}"
+          exit 1
+
+      - name: Run action against a clean fixture (expect success)
+        uses: ./packages/integrations/github
+        with:
+          path: examples/sample

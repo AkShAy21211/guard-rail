@@ -55,6 +55,9 @@ importers:
         specifier: workspace:*
         version: link:../core
     devDependencies:
+      '@guardrail/parser':
+        specifier: workspace:*
+        version: link:../parser
       typescript:
         specifier: ^5.6.3
         version: 5.9.3
