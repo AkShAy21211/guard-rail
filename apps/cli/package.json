@@ -1,12 +1,12 @@
 {
-  "name": "guardrail",
+  "name": "guard-rail",
   "version": "0.0.0",
   "license": "MIT",
   "description": "Define your project's architecture, naming conventions, and security rules once — then generate AI agent instructions and enforce them deterministically, with zero API keys required.",
-  "homepage": "https://github.com/guardrail-dev/guardrail",
+  "homepage": "https://github.com/AkShAy21211/guard-rail",
   "repository": {
     "type": "git",
-    "url": "https://github.com/guardrail-dev/guardrail.git",
+    "url": "https://github.com/AkShAy21211/guard-rail.git",
     "directory": "apps/cli"
   },
   "type": "module",

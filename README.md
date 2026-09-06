@@ -15,7 +15,7 @@ every time, without ever calling out to a model.
 ## Install
 
 ```bash
-npm install -g guardrail
+npm install -g guard-rail
 ```
 
 Or, from a clone of this repo:

@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0 # needed if you use diff-base
 
-      - uses: guardrail-dev/guardrail/packages/integrations/github@v1
+      - uses: AkShAy21211/guard-rail/packages/integrations/github@v1
         with:
           diff-base: origin/main
 ```
@@ -29,7 +29,7 @@ If your repo already has `guardrail` as a devDependency (recommended, so CI
 uses the exact version you develop against), this action detects it on
 `PATH` (via your package manager's bin shim, e.g. after `pnpm install`) and
 skips the install step. Otherwise it installs the version named by
-`guardrail-version` (default: `latest`) with `npm install -g`.
+`guardrail-version` (default: `latest`) as `guard-rail` via `npm install -g`.
 
 The check's markdown-table summary is written to `$GITHUB_STEP_SUMMARY`
 (GitHub renders this on the workflow run's summary page — the standard,

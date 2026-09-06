@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/guardrail-dev/guardrail.git"
+    "url": "https://github.com/AkShAy21211/guard-rail.git"
   },
   "engines": {
     "node": ">=20"

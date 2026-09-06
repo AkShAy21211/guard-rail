@@ -36,8 +36,8 @@ runs:
         if command -v guardrail >/dev/null 2>&1; then
           echo "guardrail already on PATH: $(command -v guardrail)"
         else
-          echo "Installing guardrail@${{ inputs.guardrail-version }}..."
-          npm install -g "guardrail@${{ inputs.guardrail-version }}"
+          echo "Installing guard-rail@${{ inputs.guardrail-version }}..."
+          npm install -g "guard-rail@${{ inputs.guardrail-version }}"
         fi
 
     - name: Run guardrail check
