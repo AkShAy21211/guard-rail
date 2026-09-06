@@ -46,3 +46,42 @@ export async function getDiffText(repoPath: string, baseBranch: string): Promise
   const staged = await git.diff(["--cached"]);
   return [committed, workingTree, staged].filter((s) => s.trim().length > 0).join("\n");
 }
+
+export interface IntroducingCommit {
+  hash: string;
+  date: string;
+  message: string;
+}
+
+/**
+ * Finds the most recent commit that changed the occurrence count of
+ * `searchString` in `filePath` (a git "pickaxe" search, `git log -S`) — used
+ * by `guardrail drift` to give an approximate "this is when it changed"
+ * answer for a dependency that's no longer present. Returns null if git
+ * has no history for that file/string (e.g. a shallow clone, or the string
+ * was never committed).
+ */
+export async function findIntroducingCommit(
+  repoPath: string,
+  filePath: string,
+  searchString: string
+): Promise<IntroducingCommit | null> {
+  const git = simpleGit(repoPath);
+  try {
+    const log = await git.raw([
+      "log",
+      `-S${searchString}`,
+      "--format=%H|%ad|%s",
+      "--date=short",
+      "--",
+      filePath,
+    ]);
+    const firstLine = log.split("\n").find((line) => line.trim().length > 0);
+    if (!firstLine) return null;
+    const [hash, date, ...rest] = firstLine.split("|");
+    if (!hash) return null;
+    return { hash: hash.slice(0, 12), date: date ?? "unknown", message: rest.join("|") };
+  } catch {
+    return null;
+  }
+}

@@ -6,5 +6,6 @@ export { checkForbiddenDependency } from "./checks/forbidden-dependency.js";
 export { checkNaming } from "./checks/naming.js";
 export { checkFilePlacement } from "./checks/file-placement.js";
 export { matchesAnyGlob } from "./util.js";
-export { getChangedFiles, getDiffText } from "./diff.js";
+export { getChangedFiles, getDiffText, findIntroducingCommit } from "./diff.js";
+export type { IntroducingCommit } from "./diff.js";
 export type { Violation } from "@guardrail/core";

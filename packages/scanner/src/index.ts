@@ -78,7 +78,66 @@ export function buildDraftConstitution(
     version: 1,
     project: { name: inferProjectName(repoPath) },
     rules,
+    declaredStack: {
+      frameworks: findings.framework.frameworks,
+      architecturePattern: findings.filesystem.pattern,
+      dependencies: findings.dependencies.dependencies,
+    },
   };
+}
+
+export interface DriftFinding {
+  kind: "framework-removed" | "dependency-removed" | "architecture-changed";
+  /** What the constitution's declaredStack snapshot says. */
+  expected: string;
+  /** What's actually detected right now. */
+  actual: string;
+}
+
+/**
+ * Compares a constitution's `declaredStack` snapshot (captured by
+ * `guardrail init`) against a fresh detector run, and reports what's
+ * drifted. Read-only — never touches the constitution or the repo. Returns
+ * an empty array (not an error) when the constitution has no snapshot to
+ * compare against.
+ */
+export function computeDrift(constitution: Constitution, fresh: DetectorFindings): DriftFinding[] {
+  const declared = constitution.declaredStack;
+  if (!declared) return [];
+
+  const findings: DriftFinding[] = [];
+
+  for (const framework of declared.frameworks) {
+    if (!fresh.framework.frameworks.includes(framework)) {
+      findings.push({
+        kind: "framework-removed",
+        expected: framework,
+        actual: fresh.framework.frameworks.join(", ") || "no frameworks detected",
+      });
+    }
+  }
+
+  for (const dep of declared.dependencies) {
+    const stillPresent =
+      fresh.dependencies.dependencies.includes(dep) || fresh.dependencies.devDependencies.includes(dep);
+    if (!stillPresent) {
+      findings.push({
+        kind: "dependency-removed",
+        expected: dep,
+        actual: "not present in package.json",
+      });
+    }
+  }
+
+  if (declared.architecturePattern && declared.architecturePattern !== fresh.filesystem.pattern) {
+    findings.push({
+      kind: "architecture-changed",
+      expected: declared.architecturePattern,
+      actual: fresh.filesystem.pattern,
+    });
+  }
+
+  return findings;
 }
 
 /** Human-readable summary of detector findings, used by both `guardrail scan` and `guardrail init`. */

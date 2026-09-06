@@ -40,7 +40,9 @@ node apps/cli/dist/bin/guardrail.js --help
 - `guardrail sync` — regenerate `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md`, and
   `.cursor/rules/*.mdc` from the constitution
 - `guardrail scan` — dry-run of `init`'s detection step (prints findings, writes nothing)
-- `guardrail drift` — flag when the codebase no longer matches the constitution (Phase 6)
+- `guardrail drift` — flag when the codebase's actual stack no longer matches what
+  `guardrail init` last captured (read-only; a warning signal by default, use `--strict`
+  to fail CI on drift)
 
 ## GitHub Action
 

@@ -65,11 +65,28 @@ export const RuleSchema = z.object({
 });
 export type Rule = z.infer<typeof RuleSchema>;
 
+/**
+ * A snapshot of what `guardrail init` detected about the project's stack at
+ * the time the constitution was drafted (or last refreshed). `guardrail
+ * drift` (Phase 6) re-detects the current stack and compares it against
+ * this snapshot — it's what lets drift answer "what did this project used
+ * to look like?" without guessing. Entirely optional: a hand-written
+ * constitution, or one from before Phase 6, simply has no drift baseline
+ * to compare against.
+ */
+export const DeclaredStackSchema = z.object({
+  frameworks: z.array(z.string()).default([]),
+  architecturePattern: z.string().optional(),
+  dependencies: z.array(z.string()).default([]),
+});
+export type DeclaredStack = z.infer<typeof DeclaredStackSchema>;
+
 export const ConstitutionSchema = z.object({
   version: z.number().int().positive().default(1),
   project: z.object({
     name: z.string().min(1, "project.name must not be empty"),
   }),
   rules: z.array(RuleSchema).default([]),
+  declaredStack: DeclaredStackSchema.optional(),
 });
 export type Constitution = z.infer<typeof ConstitutionSchema>;

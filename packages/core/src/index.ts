@@ -6,6 +6,7 @@ export {
   RuleSchema,
   EnforcementSchema,
   SeveritySchema,
+  DeclaredStackSchema,
 } from "./schema.js";
 export type {
   Constitution,
@@ -18,6 +19,7 @@ export type {
   NamingEnforcement,
   FilePlacementEnforcement,
   SemanticEnforcement,
+  DeclaredStack,
 } from "./schema.js";
 import type { Severity } from "./schema.js";
 
