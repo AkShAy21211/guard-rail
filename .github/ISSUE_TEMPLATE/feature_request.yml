@@ -1,0 +1,29 @@
+name: Feature request
+description: Suggest a new enforcement type, detector, adapter, or command.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: What are you unable to express in a constitution today, or what workflow is missing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: >-
+        If this is a new enforcement type, note whether it can be checked
+        deterministically (no network/LLM calls) — that's a hard requirement
+        for anything outside the opt-in `check --semantic` path.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false

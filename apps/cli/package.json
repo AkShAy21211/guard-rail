@@ -1,30 +1,49 @@
 {
   "name": "guardrail",
   "version": "0.0.0",
+  "license": "MIT",
   "description": "Define your project's architecture, naming conventions, and security rules once — then generate AI agent instructions and enforce them deterministically, with zero API keys required.",
+  "homepage": "https://github.com/guardrail-dev/guardrail",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guardrail-dev/guardrail.git",
+    "directory": "apps/cli"
+  },
   "type": "module",
   "bin": {
     "guardrail": "./dist/bin/guardrail.js"
   },
-  "main": "./dist/index.js",
   "files": [
-    "dist"
+    "dist/bin/guardrail.js"
   ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "bundle": "esbuild src/bin/guardrail.ts --bundle --platform=node --target=node20 --format=esm --outfile=dist/bin/guardrail.js --external:commander --external:zod --external:yaml --external:ts-morph --external:simple-git --external:fast-glob --external:ignore --external:micromatch",
+    "prepublishOnly": "pnpm run build && pnpm run bundle",
     "dev": "tsx src/bin/guardrail.ts"
   },
   "dependencies": {
+    "commander": "^12.1.0",
+    "zod": "^3.23.8",
+    "yaml": "^2.6.0",
+    "ts-morph": "^24.0.0",
+    "simple-git": "^3.27.0",
+    "fast-glob": "^3.3.2",
+    "ignore": "^5.3.2",
+    "micromatch": "^4.0.8"
+  },
+  "devDependencies": {
     "@guardrail/core": "workspace:*",
     "@guardrail/parser": "workspace:*",
     "@guardrail/rules-engine": "workspace:*",
     "@guardrail/scanner": "workspace:*",
     "@guardrail/detectors": "workspace:*",
     "@guardrail/adapters": "workspace:*",
-    "commander": "^12.1.0"
-  },
-  "devDependencies": {
     "typescript": "^5.6.3",
-    "tsx": "^4.19.1"
+    "tsx": "^4.19.1",
+    "esbuild": "^0.24.0"
   }
 }

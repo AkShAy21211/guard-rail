@@ -1,0 +1,59 @@
+name: Bug report
+description: Something in Guardrail isn't working as expected.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug, including the exact command you ran.
+      placeholder: |
+        $ guardrail check --path .
+        ...unexpected output...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: constitution
+    attributes:
+      label: Relevant .guardrail/constitution.md (or the minimal rule that reproduces it)
+      render: markdown
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Guardrail version
+      description: Output of `guardrail --version`
+    validations:
+      required: true
+
+  - type: dropdown
+    id: command
+    attributes:
+      label: Which command?
+      options:
+        - init
+        - check
+        - sync
+        - scan
+        - drift
+        - other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node.js version, package manager.
+    validations:
+      required: false

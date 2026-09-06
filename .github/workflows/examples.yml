@@ -1,0 +1,62 @@
+name: Verify example fixtures
+
+# Every examples/* fixture has a documented, intentionally-planted violation
+# (see each fixture's own README) that guardrail check is *supposed* to
+# catch, so a fixture "passing" in CI means "guardrail check reports
+# exactly the outcome its README documents" — not that the check exits 0.
+# This job asserts that documented outcome for each of the four canonical
+# fixtures (Next.js, Express, NestJS, a small monorepo), plus a clean pass
+# on the schema-demo fixture, which has no planted violation.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: examples/nextjs must fail (planted cross-feature import)
+        run: |
+          if node apps/cli/dist/bin/guardrail.js check --path examples/nextjs; then
+            echo "expected examples/nextjs's planted violation to fail the check"; exit 1
+          fi
+
+      - name: examples/express must fail (planted layering violation)
+        run: |
+          if node apps/cli/dist/bin/guardrail.js check --path examples/express; then
+            echo "expected examples/express's planted violation to fail the check"; exit 1
+          fi
+
+      - name: examples/nestjs must fail (planted naming violation)
+        run: |
+          if node apps/cli/dist/bin/guardrail.js check --path examples/nestjs; then
+            echo "expected examples/nestjs's planted violation to fail the check"; exit 1
+          fi
+
+      - name: examples/monorepo must fail (planted internal-import violation)
+        run: |
+          if node apps/cli/dist/bin/guardrail.js check --path examples/monorepo; then
+            echo "expected examples/monorepo's planted violation to fail the check"; exit 1
+          fi
+
+      - name: examples/sample must pass cleanly (no planted violation)
+        run: node apps/cli/dist/bin/guardrail.js check --path examples/sample
