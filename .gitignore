@@ -5,3 +5,5 @@ dist/
 coverage/
 .turbo/
 *.tsbuildinfo
+
+.vscode/

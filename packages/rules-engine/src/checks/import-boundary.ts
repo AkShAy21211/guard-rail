@@ -3,7 +3,7 @@ import { relative, resolve, dirname, extname } from "node:path";
 import { Project } from "ts-morph";
 import fg from "fast-glob";
 import type { Rule, Violation } from "@guardrail/core";
-import { matchesAnyGlob } from "../util.js";
+import { matchesAnyGlob, toPosixPath } from "../util.js";
 
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs"]);
 
@@ -84,10 +84,10 @@ export function checkImportBoundary(rule: Rule, repoPath: string): Violation[] {
       let candidatePath: string | null = null;
       const resolvedSourceFile = decl.getModuleSpecifierSourceFile();
       if (resolvedSourceFile) {
-        candidatePath = relative(repoPath, resolvedSourceFile.getFilePath());
+        candidatePath = toPosixPath(relative(repoPath, resolvedSourceFile.getFilePath()));
       } else {
         const manuallyResolved = resolveRelative(filePath, specifier);
-        if (manuallyResolved) candidatePath = relative(repoPath, manuallyResolved);
+        if (manuallyResolved) candidatePath = toPosixPath(relative(repoPath, manuallyResolved));
       }
 
       const isDenied =
@@ -98,7 +98,7 @@ export function checkImportBoundary(rule: Rule, repoPath: string): Violation[] {
         violations.push({
           ruleId: rule.id,
           severity: rule.severity,
-          file: relative(repoPath, filePath),
+          file: toPosixPath(relative(repoPath, filePath)),
           line: decl.getStartLineNumber(),
           message: `${rule.description} (import "${specifier}" resolves to a denied path)`,
         });
