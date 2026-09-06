@@ -1,13 +1,31 @@
 /**
- * @guardrail/core — shared types for the Guardrail constitution.
- *
- * Phase 1: minimal placeholder type so downstream packages can reference it.
- * Phase 2 replaces this with the full zod-validated schema.
+ * @guardrail/core — shared schema and types for the Guardrail constitution.
  */
-export interface Constitution {
-  version: number;
-  project: {
-    name: string;
-  };
-  rules: unknown[];
+export {
+  ConstitutionSchema,
+  RuleSchema,
+  EnforcementSchema,
+  SeveritySchema,
+} from "./schema.js";
+export type {
+  Constitution,
+  Rule,
+  Enforcement,
+  Severity,
+  ImportBoundaryEnforcement,
+  SecretScanEnforcement,
+  ForbiddenDependencyEnforcement,
+  NamingEnforcement,
+  FilePlacementEnforcement,
+  SemanticEnforcement,
+} from "./schema.js";
+import type { Severity } from "./schema.js";
+
+/** A single check result produced by the rules engine (Phase 3). */
+export interface Violation {
+  ruleId: string;
+  severity: Severity;
+  file: string;
+  line: number | null;
+  message: string;
 }
