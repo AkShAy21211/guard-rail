@@ -15,6 +15,7 @@
     "@guardrail/detectors": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "@guardrail/parser": "workspace:*"
   }
 }

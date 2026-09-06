@@ -162,3 +162,5 @@ export function parseConstitution(filePath: string): Constitution {
 
 export { ConstitutionSchema } from "@guardrail/core";
 export type { Constitution, Rule, Enforcement, Severity } from "@guardrail/core";
+export { renderConstitution } from "./render.js";
+export type { RenderOptions } from "./render.js";

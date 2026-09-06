@@ -1,7 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterAll } from "vitest";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CLI_BIN = resolve(__dirname, "../dist/bin/guardrail.js");
@@ -17,15 +19,9 @@ describe("guardrail CLI smoke test", () => {
     expect(output).toContain("scan");
   });
 
-  it("runs each still-stubbed command and exits 0", () => {
-    // `check` is implemented as of Phase 3 and is exercised separately below;
-    // the rest are still Phase 4/5 stubs.
-    for (const cmd of ["init", "sync", "scan"]) {
-      const output = execFileSync("node", [CLI_BIN, cmd], {
-        encoding: "utf-8",
-      });
-      expect(output).toContain(`${cmd} not yet implemented`);
-    }
+  it("sync (still a Phase 5 stub) prints its placeholder and exits 0", () => {
+    const output = execFileSync("node", [CLI_BIN, "sync"], { encoding: "utf-8" });
+    expect(output).toContain("sync not yet implemented");
   });
 
   it("check exits 0 on a clean repo and non-zero when violations exist", () => {
@@ -37,12 +33,37 @@ describe("guardrail CLI smoke test", () => {
     ).toThrow(); // planted violations => non-zero exit
 
     const sampleFixture = resolve(__dirname, "../../../examples/sample");
-    // examples/sample has no planted violations to trip error/critical severities
-    // in its own files (its rules target files that don't exist in this minimal
-    // fixture), so it should pass cleanly.
+    // examples/sample's rules target files that don't exist in this minimal
+    // fixture, so it should pass cleanly.
     const output = execFileSync("node", [CLI_BIN, "check", "--path", sampleFixture], {
       encoding: "utf-8",
     });
     expect(output).toContain("No violations found");
+  });
+
+  describe("scan / init (isolated temp fixture — must never touch the real repo)", () => {
+    const tmpDir = mkdtempSync(resolve(tmpdir(), "guardrail-cli-smoke-"));
+
+    afterAll(() => {
+      rmSync(tmpDir, { recursive: true, force: true });
+    });
+
+    it("scan prints findings without writing any files", () => {
+      const output = execFileSync("node", [CLI_BIN, "scan", "--path", tmpDir], {
+        encoding: "utf-8",
+      });
+      expect(output).toContain("dry run");
+    });
+
+    it("init writes a constitution, and refuses to overwrite it without --force", () => {
+      const output = execFileSync("node", [CLI_BIN, "init", "--path", tmpDir], {
+        encoding: "utf-8",
+      });
+      expect(output).toContain("Wrote .guardrail/constitution.md");
+
+      expect(() =>
+        execFileSync("node", [CLI_BIN, "init", "--path", tmpDir], { encoding: "utf-8" })
+      ).toThrow();
+    });
   });
 });
