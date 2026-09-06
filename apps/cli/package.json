@@ -1,5 +1,5 @@
 {
-  "name": "guard-rail",
+  "name": "@devdynamo/guard-rail",
   "version": "0.0.0",
   "license": "MIT",
   "description": "Define your project's architecture, naming conventions, and security rules once — then generate AI agent instructions and enforce them deterministically, with zero API keys required.",
@@ -27,23 +27,23 @@
   },
   "dependencies": {
     "commander": "^12.1.0",
-    "zod": "^3.23.8",
-    "yaml": "^2.6.0",
-    "ts-morph": "^24.0.0",
-    "simple-git": "^3.27.0",
     "fast-glob": "^3.3.2",
     "ignore": "^5.3.2",
-    "micromatch": "^4.0.8"
+    "micromatch": "^4.0.8",
+    "simple-git": "^3.27.0",
+    "ts-morph": "^24.0.0",
+    "yaml": "^2.6.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@guardrail/adapters": "workspace:*",
     "@guardrail/core": "workspace:*",
+    "@guardrail/detectors": "workspace:*",
     "@guardrail/parser": "workspace:*",
     "@guardrail/rules-engine": "workspace:*",
     "@guardrail/scanner": "workspace:*",
-    "@guardrail/detectors": "workspace:*",
-    "@guardrail/adapters": "workspace:*",
-    "typescript": "^5.6.3",
+    "esbuild": "^0.24.0",
     "tsx": "^4.19.1",
-    "esbuild": "^0.24.0"
+    "typescript": "^5.6.3"
   }
 }
