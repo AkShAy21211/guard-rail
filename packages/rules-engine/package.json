@@ -1,0 +1,23 @@
+{
+  "name": "@guardrail/rules-engine",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@guardrail/core": "workspace:*",
+    "ts-morph": "^24.0.0",
+    "simple-git": "^3.27.0",
+    "fast-glob": "^3.3.2",
+    "ignore": "^5.3.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

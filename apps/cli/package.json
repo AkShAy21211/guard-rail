@@ -1,0 +1,30 @@
+{
+  "name": "guardrail",
+  "version": "0.0.0",
+  "description": "Define your project's architecture, naming conventions, and security rules once — then generate AI agent instructions and enforce them deterministically, with zero API keys required.",
+  "type": "module",
+  "bin": {
+    "guardrail": "./dist/bin/guardrail.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/bin/guardrail.ts"
+  },
+  "dependencies": {
+    "@guardrail/core": "workspace:*",
+    "@guardrail/parser": "workspace:*",
+    "@guardrail/rules-engine": "workspace:*",
+    "@guardrail/scanner": "workspace:*",
+    "@guardrail/detectors": "workspace:*",
+    "@guardrail/adapters": "workspace:*",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.1"
+  }
+}
