@@ -106,6 +106,9 @@ importers:
       ignore:
         specifier: ^5.3.2
         version: 5.3.2
+      micromatch:
+        specifier: ^4.0.8
+        version: 4.0.8
       simple-git:
         specifier: ^3.27.0
         version: 3.36.0
@@ -113,6 +116,12 @@ importers:
         specifier: ^24.0.0
         version: 24.0.0
     devDependencies:
+      '@guardrail/parser':
+        specifier: workspace:*
+        version: link:../parser
+      '@types/micromatch':
+        specifier: ^4.0.9
+        version: 4.0.10
       typescript:
         specifier: ^5.6.3
         version: 5.9.3
@@ -587,8 +596,14 @@ packages:
   '@ts-morph/common@0.25.0':
     resolution: {integrity: sha512-kMnZz+vGGHi4GoHnLmMhGNjm44kGtKUXGnOvrKmMwAuvNjM/PgKVGfUnL7IDvK7Jb2QQ82jq3Zmp04Gy+r3Dkg==}
 
+  '@types/braces@3.0.5':
+    resolution: {integrity: sha512-SQFof9H+LXeWNz8wDe7oN5zu7ket0qwMu5vZubW4GCJ8Kkeh6nBWUz87+KTz/G3Kqsrp0j/W253XJb3KMEeg3w==}
+
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+
+  '@types/micromatch@4.0.10':
+    resolution: {integrity: sha512-5jOhFDElqr4DKTrTEbnW8DZ4Hz5LRUEmyrGpCMrD/NphYv3nUnaF08xmSLx1rGGnyEs/kFnhiw6dCgcDqMr5PQ==}
 
   '@types/node@20.19.43':
     resolution: {integrity: sha512-6oYBAi5ikg4Pl+kGsoYtawUMBT2zZMCvPNF7pVLnHZfd1zf38DRiWn/gT01RYCdUqkv7Fhr+C9ot4/tb+2sVvA==}
@@ -1192,7 +1207,13 @@ snapshots:
       path-browserify: 1.0.1
       tinyglobby: 0.2.17
 
+  '@types/braces@3.0.5': {}
+
   '@types/estree@1.0.9': {}
+
+  '@types/micromatch@4.0.10':
+    dependencies:
+      '@types/braces': 3.0.5
 
   '@types/node@20.19.43':
     dependencies:

@@ -1,0 +1,2 @@
+export const AWS_ACCESS_KEY_ID = "AKIAFAKEFAKEFAKEFAK";
+export const apiKey = "FAKE_TEST_SECRET_1234567890abcdef_NOT_REAL";

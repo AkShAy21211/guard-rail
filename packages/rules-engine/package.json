@@ -15,9 +15,12 @@
     "ts-morph": "^24.0.0",
     "simple-git": "^3.27.0",
     "fast-glob": "^3.3.2",
-    "ignore": "^5.3.2"
+    "ignore": "^5.3.2",
+    "micromatch": "^4.0.8"
   },
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "@types/micromatch": "^4.0.9",
+    "@guardrail/parser": "workspace:*"
   }
 }

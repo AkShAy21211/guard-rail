@@ -1,5 +1,10 @@
-/**
- * @guardrail/rules-engine — Phase 1 placeholder.
- * Phase 3 implements runChecks() and the individual checkers.
- */
-export const RULES_ENGINE_PLACEHOLDER = true;
+export { runChecks } from "./runChecks.js";
+export type { RunChecksOptions } from "./runChecks.js";
+export { checkImportBoundary } from "./checks/import-boundary.js";
+export { checkSecretScan } from "./checks/secret-scan.js";
+export { checkForbiddenDependency } from "./checks/forbidden-dependency.js";
+export { checkNaming } from "./checks/naming.js";
+export { checkFilePlacement } from "./checks/file-placement.js";
+export { matchesAnyGlob } from "./util.js";
+export { getChangedFiles } from "./diff.js";
+export type { Violation } from "@guardrail/core";
